@@ -1,20 +1,15 @@
 import scrapy
 import json
 
-
-TITLE = "The Godfather"
-URL = "https://www.imdb.com/title/tt0068646/reviews?ref_=tt_urv"
-
-
 class IMDbReviewsSpider(scrapy.Spider):
     name = "review_spider"
 
     def start_requests(self):
-        yield scrapy.Request(URL, callback=self.parse, meta={"title": TITLE})
+        yield scrapy.Request("The Godfather", callback=self.parse, meta={"title": "https://www.imdb.com/title/tt0068646/reviews?ref_=tt_urv"})
 
     def parse(self, response):
         title = response.meta["title"]
-
+        print(title)
         # Extracting review details
         review_blocks = response.css("div.lister-item-content")
 
@@ -26,7 +21,7 @@ class IMDbReviewsSpider(scrapy.Spider):
                 "title": title,
                 "review": review
             }
-
+            print(review_data)
             # Yielding the extracted data
             yield review_data
 
@@ -37,4 +32,5 @@ class IMDbReviewsSpider(scrapy.Spider):
 
 
 data = IMDbReviewsSpider()
-data.start_requests()
+review = data.start_requests()
+print(review)
